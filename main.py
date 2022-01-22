@@ -22,7 +22,7 @@ gh = Gauge(
 
 if __name__ == "__main__":
     # Start up the server to expose the metrics.
-    start_http_server(8000, addr="0.0.0.0")
+    start_http_server(9580, addr="0.0.0.0")
     # 遍历传感器
     while True:
         for sensor in config["sensors"]:
