@@ -7,6 +7,8 @@ from prometheus_client import Gauge, start_http_server
 
 from read_sensor import read_sensor
 
+os.environ["DEBUG"] = 0
+
 # Read config file
 with open("config.yaml", "r", encoding="utf-8") as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
