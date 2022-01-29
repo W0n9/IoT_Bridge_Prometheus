@@ -1,4 +1,4 @@
-FROM python:3.9.10-slim-bullseye
+FROM python:3.9.10-alpine3.15
 
 LABEL TsungWing Wong <TsungWing_Wong@outlook.com>
 

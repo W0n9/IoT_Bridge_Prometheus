@@ -1,5 +1,6 @@
 import threading
 import time
+import os
 
 import yaml
 from prometheus_client import Gauge, start_http_server
@@ -24,6 +25,10 @@ gh = Gauge(
 )
 
 
+def debug_print(temp, hum):
+    print("Temperature: %s, Humidity: %s" % (temp, hum))
+
+
 def write_prometheus(sensor):
     while True:
         try:
@@ -32,7 +37,8 @@ def write_prometheus(sensor):
             print(sensor["ip"] + " Error")
             print(_)
             continue
-        print("Temperature: %s, Humidity: %s" % (temp, hum))
+        if os.environ["DEBUG"] == 1:
+            debug_print(temp, hum)
         try:
             gt.labels(
                 instance=sensor["ip"],
