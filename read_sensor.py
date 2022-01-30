@@ -22,7 +22,12 @@ def read_sensor(server_ip, server_port):
     # 去除单位，只保留数值
     try:
         if text[1].split()[-1][-1] == "C":
-            temp = text[1].split()[-1][:-1]
+            try:
+                temp = float(text[1].split()[-1][:-1])
+            except:
+                Int = text[1].split()[-1][:-1].split(".")[0]
+                Dec = text[1].split()[-1][:-1].split(".")[1][1:]
+                temp = float("-" + Int + "." + Dec)
 
         if text[2].split()[-1][-1] == "%":
             hum = text[2].split()[-1][:-1]

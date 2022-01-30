@@ -9,7 +9,7 @@ WORKDIR /usr/src/app
 COPY . .
 
 RUN touch config.yaml \
-    && pip3 install --no-cache-dir -r requirements.txt -i https://mirrors.bfsu.edu.cn/pypi/web/simple/
+    && pip3 install --no-cache-dir -r requirements.txt
 
 EXPOSE 9580
 
