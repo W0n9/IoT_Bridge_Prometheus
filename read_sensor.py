@@ -25,9 +25,9 @@ def read_sensor(server_ip, server_port):
             try:
                 temp = float(text[1].split()[-1][:-1])
             except:
-                Int = text[1].split()[-1][:-1].split(".")[0]
-                Dec = text[1].split()[-1][:-1].split(".")[1][1:]
-                temp = float("-" + Int + "." + Dec)
+                Int = int(text[1].split()[-1][:-1].split(".")[0])
+                Dec = int(text[1].split()[-1][:-1].split(".")[1][1:])
+                temp = float(-1.0 * (Int + Dec * 0.01))
 
         if text[2].split()[-1][-1] == "%":
             hum = text[2].split()[-1][:-1]
