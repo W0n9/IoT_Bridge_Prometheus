@@ -31,3 +31,9 @@ Copyright (c) 2010 WRD Tech. Co., Ltd. All rights reserved.
 Temperature = 0.-3C # Eq. to -0.03C
 Humidity = 36.73%
 ```
+or a Bug when the temperature is lower than -1C
+```
+Copyright (c) 2010 WRD Tech. Co., Ltd. All rights reserved.
+Temperature = -1.-38 # Eq. to -1.38C
+Humidity = 36.73%
+```
