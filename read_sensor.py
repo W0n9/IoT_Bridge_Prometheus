@@ -8,7 +8,11 @@ from socket import *
 def read_sensor(server_ip, server_port):
     global temp, hum
     with socket(AF_INET, SOCK_STREAM) as s:
-        s.connect((server_ip, server_port))
+        try:
+            s.connect((server_ip, server_port))
+        except:
+            print(server_ip + "Connect Error")
+            return None, None, None
         text = ""
         for _ in range(0, 5):
             data = s.recv(1024).decode("utf-8")
@@ -34,7 +38,7 @@ def read_sensor(server_ip, server_port):
         else:
             hum = text[3].split()[-1][:-1]
     except:
-        print("Error")
+        print("Split Error")
         print(text)
         return None, None, None
     return temp, hum, text

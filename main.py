@@ -15,12 +15,12 @@ with open("config.yaml", "r", encoding="utf-8") as f:
 gt = Gauge(
     "temperature_metric_celsius",
     "Temperature measured by the WRD Sensor",
-    ["instance", "location", "sub_location"],
+    ["instance", "campus", "building", "room"],
 )
 gh = Gauge(
     "humidity_metric_ratio",
     "Humidity percentage measured by the WRD Sensor",
-    ["instance", "location", "sub_location"],
+    ["instance", "campus", "building", "room"],
 )
 
 
@@ -36,8 +36,9 @@ def write_prometheus(sensor):
         try:
             gt.labels(
                 instance=sensor["ip"],
-                location=sensor["location"],
-                sub_location=sensor["sub_location"],
+                campus=sensor["campus"],
+                building=sensor["building"],
+                room=sensor["room"],
             ).set(temp)
         except:
             print(sensor["ip"] + "Temp Error")
@@ -46,8 +47,9 @@ def write_prometheus(sensor):
         try:
             gh.labels(
                 instance=sensor["ip"],
-                location=sensor["location"],
-                sub_location=sensor["sub_location"],
+                campus=sensor["campus"],
+                building=sensor["building"],
+                room=sensor["room"],
             ).set(hum)
         except:
             print(sensor["ip"] + "Humd Error")
