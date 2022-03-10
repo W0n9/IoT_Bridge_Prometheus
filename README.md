@@ -7,12 +7,14 @@
 sensors:
   - 
     ip: 1.2.3.4
-    location: Tower-1
-    sub_location: 34F
+    campus: Main
+    building: Tower-1
+    room: 34F
   - 
     ip: 5.6.7.8
-    location: 新校区
-    sub_location: B通道
+    campus: 昌平校区
+    building: 第二实验楼文科楼
+    room: 一层1-5汇聚机房
 ```
 2. Run the following command:
 ```docker
