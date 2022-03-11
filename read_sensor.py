@@ -1,5 +1,7 @@
 from socket import *
+import logging
 
+logging.basicConfig(format="%(asctime)s %(message)s", level=logging.DEBUG)
 """
 因为传感器使用的是原始的TCP协议，所以需要使用socket来进行通信
 """
@@ -11,7 +13,7 @@ def read_sensor(server_ip, server_port):
         try:
             s.connect((server_ip, server_port))
         except:
-            print(server_ip + "Connect Error")
+            logging.error(server_ip + " Connect Error")
             return None, None, None
         text = ""
         for _ in range(0, 5):
@@ -38,8 +40,8 @@ def read_sensor(server_ip, server_port):
         else:
             hum = text[3].split()[-1][:-1]
     except:
-        print("Split Error")
-        print(text)
+        logging.error(server_ip +" Split Error")
+        logging.error(text)
         return None, None, None
     return temp, hum, text
 
