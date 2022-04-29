@@ -1,7 +1,8 @@
-FROM python:3.10.2-alpine3.15
+FROM python:3.10-alpine3.15
 
 LABEL TsungWing Wong <TsungWing_Wong@outlook.com>
 
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /usr/src/app
