@@ -1,5 +1,5 @@
-from socket import *
 import logging
+from socket import *
 
 logging.basicConfig(format="%(asctime)s %(message)s", level=logging.DEBUG)
 """
@@ -8,11 +8,17 @@ logging.basicConfig(format="%(asctime)s %(message)s", level=logging.DEBUG)
 
 
 def read_sensor(server_ip, server_port):
+    """
+    读取传感器数据
+    :param server_ip: 传感器IP
+    :param server_port: 传感器端口
+    :return: 温度，湿度，传感器返回的字符串
+    """
     global temp, hum
     with socket(AF_INET, SOCK_STREAM) as s:
         try:
             s.connect((server_ip, server_port))
-        except:
+        except Exception as e:
             logging.error(server_ip + " Connect Error")
             return None, None, None
         text = ""
@@ -30,7 +36,7 @@ def read_sensor(server_ip, server_port):
         if text[1].split()[-1][-1] == "C":
             try:
                 temp = float(text[1].split()[-1][:-1])
-            except:
+            except ValueError:
                 Int = int(text[1].split()[-1][:-1].split(".")[0])
                 Dec = int(text[1].split()[-1][:-1].split(".")[1][1:])
                 temp = float(-1.0 * (abs(Int) + Dec * 0.01))
@@ -39,8 +45,9 @@ def read_sensor(server_ip, server_port):
             hum = text[2].split()[-1][:-1]
         else:
             hum = text[3].split()[-1][:-1]
-    except:
-        logging.error(server_ip +" Split Error")
+        hum = float(hum)
+    except Exception as e:
+        logging.error(server_ip + " Split Error")
         logging.error(text)
         return None, None, None
     return temp, hum, text

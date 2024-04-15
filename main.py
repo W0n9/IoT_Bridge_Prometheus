@@ -33,6 +33,15 @@ def write_prometheus(sensor):
             temp, hum, _ = read_sensor(sensor["ip"], 80)
         except:
             logging.error(sensor["ip"] + " Error")
+            try:
+                gt.remove(
+                    sensor["ip"], sensor["campus"], sensor["building"], sensor["room"]
+                )
+                gh.remove(
+                    sensor["ip"], sensor["campus"], sensor["building"], sensor["room"]
+                )
+            except Exception as e:
+                pass
             continue
         # print("Temperature: %s, Humidity: %s" % (temp, hum))
         if _ != None:
