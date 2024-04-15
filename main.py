@@ -11,7 +11,7 @@ logging.basicConfig(format="%(asctime)s %(message)s", level=logging.DEBUG)
 
 # Read config file
 with open("config.yaml", "r", encoding="utf-8") as f:
-    config = yaml.load(f, Loader=yaml.FullLoader)
+    config = yaml.safe_load(f)
     logging.info(config)
 
 # Create a metric to track temperature and humidity
@@ -31,17 +31,24 @@ def write_prometheus(sensor):
     while True:
         try:
             temp, hum, _ = read_sensor(sensor["ip"], 80)
-        except:
-            logging.error(sensor["ip"] + " Error")
+            # print(temp, hum, _)
+        except Exception as e:
+            logging.error(
+                sensor["ip"] + sensor["campus"] + sensor["building"] + sensor["room"]
+            )
+            logging.exception(e)
             try:
                 gt.remove(
                     sensor["ip"], sensor["campus"], sensor["building"], sensor["room"]
                 )
+            except Exception as e:
+                logging.exception(e)
+            try:
                 gh.remove(
                     sensor["ip"], sensor["campus"], sensor["building"], sensor["room"]
                 )
             except Exception as e:
-                pass
+                logging.exception(e)
             continue
         # print("Temperature: %s, Humidity: %s" % (temp, hum))
         if _ != None:
