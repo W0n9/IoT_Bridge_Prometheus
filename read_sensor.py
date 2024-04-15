@@ -16,10 +16,12 @@ def read_sensor(server_ip, server_port):
     """
     global temp, hum
     with socket(AF_INET, SOCK_STREAM) as s:
+        s.settimeout(2)
         try:
             s.connect((server_ip, server_port))
         except Exception as e:
-            logging.error(server_ip + " Connect Error")
+            logging.error(server_ip + " " + "Connect Error")
+            logging.exception(e)
             return None, None, None
         text = ""
         for _ in range(0, 5):
@@ -27,8 +29,13 @@ def read_sensor(server_ip, server_port):
             if not data:
                 break
             else:
-                # 字符串拼接
-                text += data
+                try:
+                    # 字符串拼接
+                    text += data
+                except Exception as e:
+                    logging.error(server_ip + " " + "Recv Error")
+                    logging.exception(e)
+                    return None, None, None
     # 字符串分割
     text = text.split("\r\n")
     # 去除单位，只保留数值
