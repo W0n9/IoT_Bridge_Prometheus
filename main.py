@@ -31,6 +31,8 @@ def write_prometheus(sensor):
     while True:
         try:
             temp, hum, _ = read_sensor(sensor["ip"], 80)
+            if hum == 0:
+                raise ValueError("Humidity is 0")
             # print(temp, hum, _)
         except Exception as e:
             logging.error(
@@ -38,17 +40,42 @@ def write_prometheus(sensor):
             )
             logging.exception(e)
             try:
-                gt.remove(
-                    sensor["ip"], sensor["campus"], sensor["building"], sensor["room"]
-                )
+                if isinstance(
+                    gt.labels(
+                        sensor["ip"],
+                        sensor["campus"],
+                        sensor["building"],
+                        sensor["room"],
+                    ),
+                    Gauge,
+                ):
+                    gt.remove(
+                        sensor["ip"],
+                        sensor["campus"],
+                        sensor["building"],
+                        sensor["room"],
+                    )
             except Exception as e:
                 logging.exception(e)
             try:
-                gh.remove(
-                    sensor["ip"], sensor["campus"], sensor["building"], sensor["room"]
-                )
+                if isinstance(
+                    gh.labels(
+                        sensor["ip"],
+                        sensor["campus"],
+                        sensor["building"],
+                        sensor["room"],
+                    ),
+                    Gauge,
+                ):
+                    gh.remove(
+                        sensor["ip"],
+                        sensor["campus"],
+                        sensor["building"],
+                        sensor["room"],
+                    )
             except Exception as e:
                 logging.exception(e)
+            time.sleep(5)
             continue
         # print("Temperature: %s, Humidity: %s" % (temp, hum))
         if _ != None:
