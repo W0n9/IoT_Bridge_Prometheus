@@ -33,6 +33,8 @@ def write_prometheus(sensor):
             temp, hum, _ = read_sensor(sensor["ip"], 80)
             if hum == 0:
                 raise ValueError("Humidity is 0")
+            if _ == None:
+                raise ValueError("Data is None")
             # print(temp, hum, _)
         except Exception as e:
             logging.error(
