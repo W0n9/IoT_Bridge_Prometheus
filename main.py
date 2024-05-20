@@ -4,11 +4,16 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from prometheus_client import Gauge, make_asgi_app
+from rich.logging import RichHandler
 
 from .config import Sensor, Settings, settings
 from .read_sensor import read_sensor
 
-logging.basicConfig(format="%(asctime)s %(message)s", level=logging.INFO)
+logging.basicConfig(
+    format="%(message)s",
+    level=logging.INFO,
+    handlers=[RichHandler(rich_tracebacks=True)],
+)
 
 
 # Create a metric to track temperature and humidity
@@ -30,12 +35,12 @@ async def write_prometheus(sensor: Sensor):
             temp, hum, _ = await read_sensor(sensor.ip, 80)
             if hum == 0:
                 raise ValueError("Humidity is 0")
-            if _ == None:
+            if _ == None or _ == "":
                 raise ValueError("Data is None")
             # print(temp, hum, _)
         except Exception as e:
             logging.error(
-                f"{sensor.ip} {sensor.campus} {sensor.building} {sensor.room}"
+                f"{sensor.ip} {sensor.campus} {sensor.building} {sensor.room} {e}"
             )
             # logging.exception(e)
             try:
@@ -77,7 +82,7 @@ async def write_prometheus(sensor: Sensor):
             await asyncio.sleep(5)
             continue
         # print("Temperature: %s, Humidity: %s" % (temp, hum))
-        if _ != None:
+        if _ != None or _ != "":
             try:
                 gt.labels(
                     node=sensor.ip,
