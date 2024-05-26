@@ -29,22 +29,20 @@ async def read_sensor(server_ip, server_port):
         logging.error(f"{server_ip} Connection Error")
         logging.exception(e)
         return None, None, None
-    text = ""
-    for _ in range(0, 5):
-        data = await reader.read(1024)
+    text = []
+    for _ in range(5):
+        data = await reader.readline()
         if not data:
             break
         else:
             try:
                 # 字符串拼接
-                text += data.decode("utf-8")
+                text.append(data.decode("utf-8").strip("\r\n"))
             except UnicodeDecodeError:
                 logging.error(f"{server_ip} Decode Error")
                 return None, None, None
     writer.close()
     await writer.wait_closed()
-    # 字符串分割
-    text = text.split("\r\n")
     # 去除单位，只保留数值
     try:
         if text[1].split()[-1][-1] == "C":

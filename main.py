@@ -35,7 +35,7 @@ async def write_prometheus(sensor: Sensor):
             temp, hum, _ = await read_sensor(sensor.ip, 80)
             if hum == 0:
                 raise ValueError("Humidity is 0")
-            if _ == None or _ == "":
+            if _ == None or _ == []:
                 raise ValueError("Data is None")
             # print(temp, hum, _)
         except Exception as e:
