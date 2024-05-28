@@ -1,4 +1,4 @@
-FROM python:3.12-alpine3.19
+FROM python:3.12-slim
 
 LABEL TsungWing Wong <TsungWing_Wong@outlook.com>
 
