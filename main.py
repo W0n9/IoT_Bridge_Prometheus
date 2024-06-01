@@ -35,7 +35,7 @@ async def write_prometheus(sensor: Sensor):
             temp, hum, _ = await read_sensor(sensor.ip, 80)
             if hum == 0:
                 raise ValueError("Humidity is 0")
-            if _ == None or _ == []:
+            if _ == []:
                 raise ValueError("Data is None")
             # print(temp, hum, _)
         except Exception as e:
@@ -79,10 +79,10 @@ async def write_prometheus(sensor: Sensor):
                     )
             except Exception as e:
                 logging.exception(e)
-            await asyncio.sleep(5)
+            await asyncio.sleep(15)
             continue
         # print("Temperature: %s, Humidity: %s" % (temp, hum))
-        if _ != None or _ != "":
+        if _ != []:
             try:
                 gt.labels(
                     node=sensor.ip,
@@ -105,7 +105,7 @@ async def write_prometheus(sensor: Sensor):
                 logging.error(f"{sensor.ip} Humd Error")
                 print(_)
                 continue
-            await asyncio.sleep(1)
+            await asyncio.sleep(5)
 
 
 async def main(settings: Settings):
