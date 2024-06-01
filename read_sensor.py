@@ -10,7 +10,7 @@ async def read_sensor(server_ip, server_port):
     :param server_port: 传感器端口
     :return: 温度，湿度，传感器返回的字符串
     """
-    global temp, hum
+    # global temp, hum
     try:
         """
         因为传感器使用的是原始的TCP协议，所以需要使用socket来进行通信
@@ -21,15 +21,15 @@ async def read_sensor(server_ip, server_port):
         )
     except asyncio.TimeoutError:
         logging.error(f"{server_ip} Connection Timeout")
-        return None, None, None
+        return None, None, list()
     except ConnectionRefusedError:
         logging.error(f"{server_ip} Connection Refused")
-        return None, None, None
+        return None, None, list()
     except Exception as e:
         logging.error(f"{server_ip} Connection Error")
         logging.exception(e)
-        return None, None, None
-    text = []
+        return None, None, list()
+    text: list[str] = []
     for _ in range(5):
         data = await reader.readline()
         if not data:
@@ -40,7 +40,7 @@ async def read_sensor(server_ip, server_port):
                 text.append(data.decode("utf-8").strip("\r\n"))
             except UnicodeDecodeError:
                 logging.error(f"{server_ip} Decode Error")
-                return None, None, None
+                return None, None, list()
     writer.close()
     await writer.wait_closed()
     # 去除单位，只保留数值
@@ -61,7 +61,7 @@ async def read_sensor(server_ip, server_port):
     except (IndexError, ValueError) as e:
         logging.error(f"{server_ip} Split Error")
         logging.error(text)
-        return None, None, None
+        return None, None, list()
     return temp, hum, text
 
 
