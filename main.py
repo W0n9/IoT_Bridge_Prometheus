@@ -90,7 +90,7 @@ async def write_prometheus(sensor: Sensor):
                     building=sensor.building,
                     room=sensor.room,
                 ).set(temp)
-            except:
+            except:  # noqa: E722
                 logging.error(f"{sensor.ip} Temp Error")
                 print(_)
                 continue
@@ -101,7 +101,7 @@ async def write_prometheus(sensor: Sensor):
                     building=sensor.building,
                     room=sensor.room,
                 ).set(hum)
-            except:
+            except:  # noqa: E722
                 logging.error(f"{sensor.ip} Humd Error")
                 print(_)
                 continue
