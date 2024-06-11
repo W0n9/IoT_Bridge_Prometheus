@@ -1,14 +1,19 @@
 from typing import Tuple, Type
 
 from pydantic import BaseModel, IPvAnyAddress, field_validator
-from pydantic_settings import (BaseSettings, PydanticBaseSettingsSource,
-                               SettingsConfigDict, YamlConfigSettingsSource)
+from pydantic_settings import (
+    BaseSettings,
+    PydanticBaseSettingsSource,
+    SettingsConfigDict,
+    YamlConfigSettingsSource,
+)
 
 
 class Sensor(BaseModel):
     """
     传感器配置
     """
+
     ip: IPvAnyAddress
     campus: str
     building: str

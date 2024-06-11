@@ -10,11 +10,11 @@
 				"ms-azuretools.vscode-docker",
 				"github.vscode-github-actions",
 				"oderwat.indent-rainbow",
-				"ms-python.isort",
 				"ms-python.python",
 				"ms-python.vscode-pylance",
 				"redhat.vscode-yaml",
-				"ms-python.black-formatter",
+				"charliermarsh.ruff",
+				"esbenp.prettier-vscode"
 			]
 		}
 	}

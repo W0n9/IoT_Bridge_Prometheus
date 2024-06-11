@@ -59,7 +59,7 @@ async def read_sensor(server_ip, server_port):
             hum = text[3].split()[-1][:-1]
         hum = float(hum)
     except (IndexError, ValueError) as e:
-        logging.error(f"{server_ip} Split Error")
+        logging.error(f"{server_ip} Split Error {e}")
         logging.error(text)
         return None, None, list()
     return temp, hum, text
