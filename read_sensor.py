@@ -31,7 +31,7 @@ async def read_sensor(server_ip, server_port):
         return None, None, list()
     text: list[str] = []
     for _ in range(5):
-        data = await reader.readline()
+        data = await asyncio.wait_for(reader.readline(), timeout=1.0)
         if not data:
             break
         else:
@@ -40,6 +40,9 @@ async def read_sensor(server_ip, server_port):
                 text.append(data.decode("utf-8").strip("\r\n"))
             except UnicodeDecodeError:
                 logging.error(f"{server_ip} Decode Error")
+                return None, None, list()
+            except asyncio.TimeoutError:
+                logging.error(f"{server_ip} Read Timeout")
                 return None, None, list()
     writer.close()
     await writer.wait_closed()
