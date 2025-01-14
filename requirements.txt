@@ -1,5 +1,5 @@
 prometheus-client
-fastapi
+fastapi[standard]
 pydantic-settings[yaml]
 asyncer
 rich
