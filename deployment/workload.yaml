@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: iot
-        image: w0n9/iot_bridge_prometheus:v0.0.17
+        image: w0n9/iot_bridge_prometheus:v0.0.18
         resources:
           limits:
             memory: "128Mi"
