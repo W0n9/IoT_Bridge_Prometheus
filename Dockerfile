@@ -1,9 +1,9 @@
 FROM python:3.13-slim
 
-LABEL TsungWing Wong <TsungWing_Wong@outlook.com>
+LABEL TsungWing Wong=<TsungWing_Wong@outlook.com>
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 WORKDIR /usr/src/app
 
