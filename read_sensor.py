@@ -1,6 +1,6 @@
 # Function: 读取传感器数据
 import asyncio
-import logging
+from loguru import logger
 
 
 async def read_sensor(server_ip, server_port):
@@ -10,7 +10,6 @@ async def read_sensor(server_ip, server_port):
     :param server_port: 传感器端口
     :return: 温度，湿度，传感器返回的字符串
     """
-    # global temp, hum
     try:
         """
         因为传感器使用的是原始的TCP协议，所以需要使用socket来进行通信
@@ -20,15 +19,15 @@ async def read_sensor(server_ip, server_port):
             asyncio.open_connection(server_ip, server_port), timeout=2
         )
     except asyncio.TimeoutError:
-        logging.error(f"{server_ip} Connection Timeout")
-        return None, None, list()
+        logger.error(f"{server_ip} Connection Timeout")
+        return None, None, []
     except ConnectionRefusedError:
-        logging.error(f"{server_ip} Connection Refused")
-        return None, None, list()
+        logger.error(f"{server_ip} Connection Refused")
+        return None, None, []
     except Exception as e:
-        logging.error(f"{server_ip} Connection Error")
-        logging.exception(e)
-        return None, None, list()
+        logger.error(f"{server_ip} Connection Error")
+        logger.exception(e)
+        return None, None, []
     text: list[str] = []
     for _ in range(5):
         data = await asyncio.wait_for(reader.readline(), timeout=1.0)
@@ -39,10 +38,10 @@ async def read_sensor(server_ip, server_port):
                 # 字符串拼接
                 text.append(data.decode("utf-8").strip("\r\n"))
             except UnicodeDecodeError:
-                logging.error(f"{server_ip} Decode Error")
+                logger.error(f"{server_ip} Decode Error")
                 return None, None, list()
             except asyncio.TimeoutError:
-                logging.error(f"{server_ip} Read Timeout")
+                logger.error(f"{server_ip} Read Timeout")
                 return None, None, list()
     writer.close()
     await writer.wait_closed()
@@ -55,6 +54,8 @@ async def read_sensor(server_ip, server_port):
                 Int = int(text[1].split()[-1][:-1].split(".")[0])
                 Dec = int(text[1].split()[-1][:-1].split(".")[1][1:])
                 temp = float(-1.0 * (abs(Int) + Dec * 0.01))
+        else:
+            return None, None, []
 
         if text[2].split()[-1][-1] == "%":
             hum = text[2].split()[-1][:-1]
@@ -62,9 +63,9 @@ async def read_sensor(server_ip, server_port):
             hum = text[3].split()[-1][:-1]
         hum = float(hum)
     except (IndexError, ValueError) as e:
-        logging.error(f"{server_ip} Split Error {e}")
-        logging.error(text)
-        return None, None, list()
+        logger.error(f"{server_ip} Split Error {e}")
+        logger.error(text)
+        return None, None, []
     return temp, hum, text
 
 
@@ -72,4 +73,4 @@ if __name__ == "__main__":
     server_ip = "10.10.31.253"
     server_port = 80
     temp, hum, _ = asyncio.run(read_sensor(server_ip, server_port))
-    print(temp, hum)
+    logger.info(f"Temp: {temp}, Hum: {hum}")

@@ -1,5 +1,5 @@
 import asyncio
-import logging
+from loguru import logger
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -9,10 +9,10 @@ from rich.logging import RichHandler
 from .config import Sensor, Settings, settings
 from .read_sensor import read_sensor
 
-logging.basicConfig(
-    format="%(message)s",
-    level=logging.INFO,
-    handlers=[RichHandler(rich_tracebacks=True)],
+# 配置loguru使用rich输出
+logger.remove()
+logger.configure(
+    handlers=[{"sink": RichHandler(rich_tracebacks=True), "format": "{message}"}]
 )
 
 
@@ -39,10 +39,10 @@ async def write_prometheus(sensor: Sensor):
                 raise ValueError("Data is None")
             # print(temp, hum, _)
         except Exception as e:
-            logging.error(
+            logger.error(
                 f"{sensor.ip} {sensor.campus} {sensor.building} {sensor.room} {e}"
             )
-            # logging.exception(e)
+            # logger.exception(e)
             try:
                 if isinstance(
                     gt.labels(
@@ -60,7 +60,7 @@ async def write_prometheus(sensor: Sensor):
                         sensor.room,
                     )
             except Exception as e:
-                logging.exception(e)
+                logger.exception(e)
             try:
                 if isinstance(
                     gh.labels(
@@ -78,7 +78,7 @@ async def write_prometheus(sensor: Sensor):
                         sensor.room,
                     )
             except Exception as e:
-                logging.exception(e)
+                logger.exception(e)
             await asyncio.sleep(15)
             continue
         # print("Temperature: %s, Humidity: %s" % (temp, hum))
@@ -91,7 +91,7 @@ async def write_prometheus(sensor: Sensor):
                     room=sensor.room,
                 ).set(temp)
             except:  # noqa: E722
-                logging.error(f"{sensor.ip} Temp Error")
+                logger.error(f"{sensor.ip} Temp Error")
                 print(_)
                 continue
             try:
@@ -102,7 +102,7 @@ async def write_prometheus(sensor: Sensor):
                     room=sensor.room,
                 ).set(hum)
             except:  # noqa: E722
-                logging.error(f"{sensor.ip} Humd Error")
+                logger.error(f"{sensor.ip} Humd Error")
                 print(_)
                 continue
             await asyncio.sleep(5)
