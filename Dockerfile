@@ -1,17 +1,22 @@
 FROM python:3.13-slim
 
-LABEL TsungWing Wong=<TsungWing_Wong@outlook.com>
+LABEL TsungWing.Wong="TsungWing_Wong@outlook.com"
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# Install uv.
+COPY --from=ghcr.io/astral-sh/uv:0.6.16 /uv /uvx /bin/
 
-WORKDIR /usr/src/app
+# Copy the application into the container.
+COPY . /app
 
-COPY . .
+# Install the application dependencies.
+WORKDIR /app
+RUN uv sync --frozen --no-cache
 
-RUN touch config.yaml \
-    && pip3 install --no-cache-dir -r requirements.txt
+# RUN pip install uv \
+#     && touch config.yaml \
+#     && uv pip install .
 
 EXPOSE 9580
 
-CMD ["fastapi", "run", "--port", "9580", "main.py"]
+# Run the application.
+CMD ["/app/.venv/bin/fastapi", "run", "main.py", "--port", "9580"]

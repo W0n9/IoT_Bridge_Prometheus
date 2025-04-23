@@ -1,0 +1,13 @@
+[project]
+name = "iot-bridge-prometheus"
+version = "0.1.0"
+description = "IoT Bridge for Prometheus metrics collection"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "asyncer>=0.0.8",
+    "fastapi[standard]>=0.115.12",
+    "loguru>=0.7.3",
+    "prometheus-client>=0.21.1",
+    "pydantic-settings[yaml]>=2.9.1",
+]

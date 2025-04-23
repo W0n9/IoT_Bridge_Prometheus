@@ -1,6 +1,0 @@
-prometheus-client
-fastapi[standard]
-pydantic-settings[yaml]
-asyncer
-rich
-uvicorn

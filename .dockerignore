@@ -3,3 +3,6 @@ config.yaml
 .git/
 __pycache__/
 deployment/
+.venv
+.devcontainer
+.vscode
