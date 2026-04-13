@@ -8,6 +8,6 @@ dependencies = [
     "asyncer>=0.0.8",
     "fastapi[standard]>=0.135.3",
     "loguru>=0.7.3",
-    "prometheus-client>=0.21.1",
+    "prometheus-client>=0.25.0",
     "pydantic-settings[yaml]>=2.9.1",
 ]
